@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { DefineComponent } from 'vue'
+
 type ClassValue = string | object | (string | object)[] | undefined
 
 interface BaseProps {
@@ -7,11 +9,13 @@ interface BaseProps {
 
 interface LinkProps extends BaseProps {
   to: string
+  is: DefineComponent
   onClick?: never
 }
 
 interface ButtonProps extends BaseProps {
   to?: never
+  is?: never
   onClick: (event: MouseEvent) => void
 }
 
@@ -29,19 +33,13 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <NuxtLink
-    v-if="props.to && !props.disabled"
+  <component
+    :is="props.to && !props.disabled ? props.is : 'button'"
     :class="props.class"
     :to="props.to"
-  >
-    <slot />
-  </NuxtLink>
-  <button
-    v-else
-    :class="props.class"
     :disabled="props.disabled"
-    @click="(e) => emit('click', e)"
+    @click="(e: MouseEvent) => emit('click', e)"
   >
     <slot />
-  </button>
+  </component>
 </template>
