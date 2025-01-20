@@ -1,1 +1,4 @@
-export const add = (a: number, b: number) => a + b
+import ButtonBare from './ButtonBare.vue'
+
+export * from './ButtonBare.vue'
+export { ButtonBare }

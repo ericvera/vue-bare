@@ -15,7 +15,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "tsc --build",
+    "build": "vite build",
     "lint": "eslint .",
     "test": "vitest run",
     "smoke": "yarn build && yarn lint && yarn test",
@@ -25,13 +25,16 @@
     "postpublish": "pinst --enable"
   },
   "packageManager": "yarn@4.6.0",
+  "peerDependencies": {
+    "vue": "*"
+  },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
     "@tsconfig/strictest": "^2.0.5",
     "@types/node": "^22.10.7",
+    "@vitejs/plugin-vue": "^5.2.1",
     "eslint": "^9.18.0",
     "husky": "^9.1.7",
-    "is-ci": "^4.1.0",
     "lint-staged": "^15.4.1",
     "pinst": "^3.0.0",
     "prettier": "^3.4.2",
@@ -39,7 +42,10 @@
     "typedoc-plugin-markdown": "^4.4.1",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.21.0",
-    "vitest": "^3.0.2"
+    "vite": "^6.0.10",
+    "vite-plugin-dts": "^4.5.0",
+    "vitest": "^3.0.2",
+    "vue": "^3.5.13"
   },
   "prettier": {
     "tabWidth": 2,
