@@ -1,31 +1,16 @@
 <script setup lang="ts">
-import { DefineComponent } from 'vue'
+import { ClassValue } from './types'
 
-type ClassValue = string | object | (string | object)[] | undefined
-
-interface BaseProps {
+export interface ButtonProps {
   disabled?: boolean
-}
-
-interface LinkProps extends BaseProps {
-  to: string
-  is: DefineComponent
-  onClick?: never
-}
-
-interface ButtonProps extends BaseProps {
-  to?: never
-  is?: never
   onClick: (event: MouseEvent) => void
 }
 
-export type ButtonBareProps = LinkProps | ButtonProps
-
-interface Props {
+interface Props extends ButtonProps {
   class: ClassValue
 }
 
-const props = defineProps<Props & ButtonBareProps>()
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
   click: [event: MouseEvent]
@@ -33,13 +18,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <component
-    :is="props.to && !props.disabled ? props.is : 'button'"
-    :class="props.class"
-    :to="props.to"
-    :disabled="props.disabled"
-    @click="(e: MouseEvent) => emit('click', e)"
-  >
+  <button v-bind="props" @click="(e: MouseEvent) => emit('click', e)">
     <slot />
-  </component>
+  </button>
 </template>
