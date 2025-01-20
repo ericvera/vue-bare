@@ -4,6 +4,7 @@ import { ClassValue } from './types'
 
 export interface ButtonLinkProps {
   disabled?: boolean
+  class?: ClassValue
   to: string
 }
 
