@@ -1,9 +1,19 @@
 import EmailInputBare from './EmailInputBare.vue'
 import PasswordInputBare from './PasswordInputBare.vue'
+import RadioListBare from './RadioListBare.vue'
+import RadioListItemBare from './RadioListItemBare.vue'
 import TextInputBare from './TextInputBare.vue'
 
 export * from './EmailInputBare.vue'
 export * from './PasswordInputBare.vue'
+export * from './RadioListBare.vue'
+export * from './RadioListItemBare.vue'
 export * from './TextInputBare.vue'
 
-export { EmailInputBare, PasswordInputBare, TextInputBare }
+export {
+  EmailInputBare,
+  PasswordInputBare,
+  RadioListBare,
+  RadioListItemBare,
+  TextInputBare,
+}
