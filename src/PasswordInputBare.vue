@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ClassValue } from './types'
 
-export interface EmailInputBareProps {
+export interface PasswordInputBareProps {
   // https://developer.apple.com/documentation/security/password_autofill/enabling_password_autofill_on_an_html_input_element
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
-  autocomplete: 'off' | 'username' | 'email'
+  autocomplete: 'current-password' | 'new-password'
 
   id: string
   name: string
@@ -13,7 +13,7 @@ export interface EmailInputBareProps {
   class?: ClassValue
 }
 
-interface Props extends EmailInputBareProps {
+interface Props extends PasswordInputBareProps {
   class: ClassValue
 }
 
@@ -28,11 +28,10 @@ const model = defineModel({
 <template>
   <input
     v-model="model"
-    type="email"
+    type="password"
     autocapitalize="none"
-    inputmode="email"
+    inputmode="text"
     spellcheck="false"
     v-bind="props"
-    @keypress.prevent.space
   />
 </template>
