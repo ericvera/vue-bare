@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed, watchEffect } from 'vue'
 import { ClassValue } from './types'
 
 export interface TextInputBareProps {
@@ -28,6 +29,7 @@ export interface TextInputBareProps {
   id: string
   placeholder: string
   name: string
+  value?: string
   autofocus?: boolean
   disabled?: boolean
   class?: ClassValue
@@ -45,8 +47,19 @@ const model = defineModel({
   type: String,
   default: '',
 })
+
+watchEffect(() => {
+  if (props.value !== undefined) {
+    model.value = props.value
+  }
+})
+
+const passtroughProps = computed(() => {
+  const { value, ...rest } = props
+  return rest
+})
 </script>
 
 <template>
-  <input v-model="model" type="text" v-bind="props" />
+  <input v-model="model" type="text" v-bind="passtroughProps" />
 </template>
