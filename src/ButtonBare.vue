@@ -3,7 +3,7 @@ import { ClassValue } from './types'
 
 export interface ButtonProps {
   disabled?: boolean
-  onClick: (event: MouseEvent) => void
+  onClick?: (event: MouseEvent) => void
   class?: ClassValue
 }
 
@@ -12,14 +12,10 @@ interface Props extends ButtonProps {
 }
 
 const props = defineProps<Props>()
-
-const emit = defineEmits<{
-  click: [event: MouseEvent]
-}>()
 </script>
 
 <template>
-  <button v-bind="props" @click="(e: MouseEvent) => emit('click', e)">
+  <component :is="props.onClick ? 'button' : 'a'" v-bind="props">
     <slot />
-  </button>
+  </component>
 </template>
