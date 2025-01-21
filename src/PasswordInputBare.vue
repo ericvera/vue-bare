@@ -9,7 +9,7 @@ export interface PasswordInputBareProps {
 
   id: string
   name: string
-  value: string
+  value?: string
   autofocus?: boolean
   disabled?: boolean
   class?: ClassValue
