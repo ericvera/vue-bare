@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, watchEffect } from 'vue'
-
-type ClassValue = string | object | (string | object)[] | undefined
+import { ClassValue } from './types'
 
 export interface TextInputBareProps {
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/autocapitalize
