@@ -1,7 +1,5 @@
-import ButtonBare from './ButtonBare.vue'
-import ButtonLinkBare from './ButtonLinkBare.vue'
+import TextInputBare from './TextInputBare.vue'
 
-export * from './ButtonBare.vue'
-export * from './ButtonLinkBare.vue'
+export * from './TextInputBare.vue'
 
-export { ButtonBare, ButtonLinkBare }
+export { TextInputBare }
