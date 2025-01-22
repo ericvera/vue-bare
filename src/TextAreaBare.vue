@@ -1,0 +1,169 @@
+<script setup lang="ts">
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import { ClassValue } from './types'
+
+export interface TextAreaBareProps {
+  // https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/spellcheck
+  // NOTE: This being on will cause email to be auto-capitalized
+  spellcheck: boolean
+
+  id: string
+  placeholder: string
+  name: string
+  value?: string
+  autofocus?: boolean
+  disabled?: boolean
+  maxRows?: number
+  maxCharacters?: number
+  class?: ClassValue
+}
+
+interface Props extends TextAreaBareProps {
+  class: ClassValue
+}
+
+const MaxSupportedRows = 10
+
+const props = defineProps<Props>()
+
+const model = defineModel({
+  type: String,
+  default: '',
+})
+
+const emit = defineEmits(['keypress', 'focus', 'blur'])
+
+const calculatedLineHeight = ref(0)
+const element = ref<HTMLTextAreaElement>()
+
+defineExpose({
+  focus: () => {
+    element.value?.focus()
+  },
+  blur: () => {
+    element.value?.blur()
+  },
+  click: () => {
+    element.value?.click()
+  },
+})
+
+// Remove class from passtroughProps as it is handled separately
+const passtroughProps = computed(() => {
+  const { maxRows, maxCharacters, value, ...rest } = props
+  return rest
+})
+
+const resize = () => {
+  if (!element.value) {
+    return
+  }
+
+  element.value.style.height = 'inherit'
+
+  const computedStyles = window.getComputedStyle(element.value)
+  const totalPadding = getTotalPadding(computedStyles)
+
+  const height =
+    Math.min(
+      (props.maxRows ?? MaxSupportedRows) * calculatedLineHeight.value,
+      element.value.scrollHeight - totalPadding,
+    ) + totalPadding
+
+  element.value.style.height = `${height}px`
+}
+
+const getTotalPadding = (computedStyle: CSSStyleDeclaration) =>
+  parseInt(computedStyle.getPropertyValue('padding-top')) +
+  parseInt(computedStyle.getPropertyValue('padding-bottom'))
+
+const getLineHeight = () => {
+  if (!element.value) {
+    return 0
+  }
+
+  let computedStyles = window.getComputedStyle(element.value)
+
+  const oneLineHeight =
+    element.value?.scrollHeight - getTotalPadding(computedStyles)
+
+  element.value.rows = 2
+
+  computedStyles = window.getComputedStyle(element.value)
+
+  const twoLineHeight =
+    element.value?.scrollHeight - getTotalPadding(computedStyles)
+
+  element.value.rows = 1
+
+  return twoLineHeight - oneLineHeight
+}
+
+onMounted(() => {
+  calculatedLineHeight.value = getLineHeight()
+})
+
+// Calculate whenever the value changes
+watch(
+  [model, calculatedLineHeight],
+  () => {
+    resize()
+  },
+  // Needed in order to resize after the textarea has been updated
+  { flush: 'post' },
+)
+
+// Ignore keypresses beyond maxCharacters
+const keypressHandler = (e: KeyboardEvent) => {
+  emit('keypress', e)
+
+  if (props.maxCharacters === undefined) {
+    return
+  }
+
+  const { value } = e.target as HTMLTextAreaElement
+
+  if (value.length >= props.maxCharacters) {
+    e.preventDefault()
+  }
+}
+
+// Dispose of input beyond maxCharacters
+const changeHandler = (e: Event) => {
+  if (props.maxCharacters === undefined) {
+    return
+  }
+
+  const target = e.target as HTMLTextAreaElement
+  const trimmedValue = target.value.slice(0, props.maxCharacters)
+
+  // Ensure that values stay in sync
+  target.value = trimmedValue
+  model.value = trimmedValue
+
+  resize()
+}
+
+watchEffect(() => {
+  if (props.value !== undefined) {
+    model.value = props.value
+  }
+})
+</script>
+
+<template>
+  <textarea
+    ref="element"
+    v-model="model"
+    rows="1"
+    autoComplete="off"
+    autocapitalize="sentence"
+    inputmode="text"
+    v-bind="passtroughProps"
+    @keypress="keypressHandler"
+    @input="changeHandler"
+    @change="changeHandler"
+    @focus="$emit('focus')"
+    @blur="$emit('blur')"
+  />
+</template>
