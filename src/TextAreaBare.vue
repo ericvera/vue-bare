@@ -3,26 +3,27 @@ import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 import { ClassValue } from './types'
 
 export interface TextAreaBareProps {
-  // https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/spellcheck
-  // NOTE: This being on will cause email to be auto-capitalized
+  id: string
+  name: string
+  placeholder: string
+  /**
+   * @see [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/spellcheck)
+   */
   spellcheck: boolean
 
-  id: string
-  placeholder: string
-  name: string
-  value?: string
   autofocus?: boolean
-  disabled?: boolean
-  maxRows?: number
-  maxCharacters?: number
   class?: ClassValue
+  disabled?: boolean
+  maxCharacters?: number
+  maxRows?: number
+  value?: string
 }
 
 interface Props extends TextAreaBareProps {
   class: ClassValue
 }
 
-const MaxSupportedRows = 10
+const DefaultRows = 2
 
 const props = defineProps<Props>()
 
@@ -66,7 +67,7 @@ const resize = () => {
 
   const height =
     Math.min(
-      (props.maxRows ?? MaxSupportedRows) * calculatedLineHeight.value,
+      (props.maxRows ?? DefaultRows) * calculatedLineHeight.value,
       element.value.scrollHeight - totalPadding,
     ) + totalPadding
 

@@ -15,6 +15,7 @@ export * from './SnackbarBare.vue'
 export * from './SwitchBare.vue'
 export * from './TextAreaBare.vue'
 export * from './TextInputBare.vue'
+export * from './types'
 
 export {
   EmailInputBare,

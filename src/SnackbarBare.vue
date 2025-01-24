@@ -3,9 +3,10 @@ import { ref, watchEffect } from 'vue'
 import { ClassValue } from './types'
 
 export interface SnackbarBareProps {
+  hideClass: string
   show: boolean
   showClass: string
-  hideClass: string
+
   class?: ClassValue
 }
 

@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import { ClassValue } from './types'
 import { provide, watchEffect } from 'vue'
+import { RadioListInjectionKeys } from './constants'
+import { ClassValue } from './types'
 
 export interface RadioListBareProps {
-  value?: string
-  disabled?: boolean
-  // NOTE: ul may not require styling so not forcing class prop to be defined
+  id: string
+  name: string
+
+  /**
+   * @remarks `ul` may not require styling so not forcing class prop to be
+   * defined
+   */
   class?: ClassValue
+  disabled?: boolean
+  value?: string
 }
 
 const props = defineProps<RadioListBareProps>()
@@ -22,13 +29,13 @@ watchEffect(() => {
   model.value = props.value
 })
 
-provide('value', model)
-provide('disabled', props.disabled)
-provide('onItemClick', onItemClick)
+provide(RadioListInjectionKeys.Value, model)
+provide(RadioListInjectionKeys.Disabled, props.disabled)
+provide(RadioListInjectionKeys.OnItemClick, onItemClick)
 </script>
 
 <template>
-  <ul :class="props.class">
+  <ul v-bind="props">
     <slot />
   </ul>
 </template>

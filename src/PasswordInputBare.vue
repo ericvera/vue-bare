@@ -3,16 +3,18 @@ import { computed, watchEffect } from 'vue'
 import { ClassValue } from './types'
 
 export interface PasswordInputBareProps {
-  // https://developer.apple.com/documentation/security/password_autofill/enabling_password_autofill_on_an_html_input_element
-  // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
+  /**
+   * @see [Apple Docs](https://developer.apple.com/documentation/security/password_autofill/enabling_password_autofill_on_an_html_input_element)
+   * @see [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)
+   */
   autocomplete: 'current-password' | 'new-password'
-
   id: string
   name: string
-  value?: string
+
   autofocus?: boolean
-  disabled?: boolean
   class?: ClassValue
+  disabled?: boolean
+  value?: string
 }
 
 interface Props extends PasswordInputBareProps {

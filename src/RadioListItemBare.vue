@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ClassValue } from './types'
 import { inject } from 'vue'
+import { RadioListInjectionKeys } from './constants'
+import { ClassValue } from './types'
 
 export interface RadioListItemBareProps {
   value: string
+
   class?: ClassValue
   disabled?: boolean
 }
@@ -25,9 +27,12 @@ defineSlots<{
   default(props: RadioListItemBareDefaultSlotProps): unknown
 }>()
 
-const listDisabled = inject<boolean>('disabled', false)
-const selectedValue = inject<string>('value', '')
-const onItemClick = inject<(value: string) => void>('onItemClick', () => {})
+const listDisabled = inject<boolean>(RadioListInjectionKeys.Disabled, false)
+const selectedValue = inject<string>(RadioListInjectionKeys.Value, '')
+const onItemClick = inject<(value: string) => void>(
+  RadioListInjectionKeys.OnItemClick,
+  () => {},
+)
 
 const internalOnItemClick = () => {
   if (!listDisabled && !props.disabled) {

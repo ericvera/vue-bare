@@ -4,12 +4,18 @@ import { ClassValue } from './types'
 
 export interface SwitchBareProps {
   id: string
-  disabled?: boolean
+  name: string
+
   class?: ClassValue
+  disabled?: boolean
   value?: boolean
 }
 
-const props = defineProps<SwitchBareProps>()
+interface Props extends SwitchBareProps {
+  class: ClassValue
+}
+
+const props = defineProps<Props>()
 
 const model = defineModel({
   type: Boolean,

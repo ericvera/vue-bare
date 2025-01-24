@@ -3,16 +3,19 @@ import { computed, watchEffect } from 'vue'
 import { ClassValue } from './types'
 
 export interface EmailInputBareProps {
-  // https://developer.apple.com/documentation/security/password_autofill/enabling_password_autofill_on_an_html_input_element
-  // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
+  /**
+   * @see [Apple Docs](https://developer.apple.com/documentation/security/password_autofill/enabling_password_autofill_on_an_html_input_element)
+   * @see [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)
+   */
   autocomplete: 'off' | 'username' | 'email'
-
   id: string
   name: string
-  value?: string
+
   autofocus?: boolean
-  disabled?: boolean
   class?: ClassValue
+  disabled?: boolean
+  placeholder?: string
+  value?: string
 }
 
 interface Props extends EmailInputBareProps {
@@ -33,8 +36,12 @@ watchEffect(() => {
 })
 
 const passtroughProps = computed(() => {
-  const { value, ...rest } = props
-  return rest
+  const { value, placeholder, ...rest } = props
+
+  return {
+    ...rest,
+    ...(placeholder !== undefined && { placeholder }),
+  }
 })
 </script>
 
