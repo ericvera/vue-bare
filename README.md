@@ -4,7 +4,6 @@
 
 [![github license](https://img.shields.io/github/license/ericvera/vue-bare.svg?style=flat-square)](https://github.com/ericvera/vue-bare/blob/master/LICENSE)
 [![npm version](https://img.shields.io/npm/v/vue-bare.svg?style=flat-square)](https://npmjs.org/package/vue-bare)
-[![npm downloads](https://img.shields.io/npm/dt/vue-bare.svg?style=flat-square)](https://npmjs.org/package/vue-bare)
 
 Vue Bare provides a collection of unstyled Vue components that focus on making it simple to provide a great user experience.
 

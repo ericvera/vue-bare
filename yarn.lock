@@ -907,7 +907,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@volar/typescript@npm:^2.4.11":
+"@volar/typescript@npm:^2.4.11, @volar/typescript@npm:~2.4.11":
   version: 2.4.11
   resolution: "@volar/typescript@npm:2.4.11"
   dependencies:
@@ -3570,10 +3570,25 @@ __metadata:
     vite: "npm:^6.0.10"
     vite-plugin-dts: "npm:^4.5.0"
     vue: "npm:^3.5.13"
+    vue-tsc: "npm:^2.2.0"
   peerDependencies:
-    vue: ^3.0.0
+    vue: ^3.5.0
   languageName: unknown
   linkType: soft
+
+"vue-tsc@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "vue-tsc@npm:2.2.0"
+  dependencies:
+    "@volar/typescript": "npm:~2.4.11"
+    "@vue/language-core": "npm:2.2.0"
+  peerDependencies:
+    typescript: ">=5.0.0"
+  bin:
+    vue-tsc: ./bin/vue-tsc.js
+  checksum: 10c0/7258db27efd689402cf66631e5425fceb032526b0647c5188080a5ddbb02040eaaeafc1685270d281c6f05f9230344351343be5494a78b517173df2c6c0e4796
+  languageName: node
+  linkType: hard
 
 "vue@npm:^3.5.13":
   version: 3.5.13
