@@ -4,6 +4,7 @@ import RadioListBare from './RadioListBare.vue'
 import RadioListItemBare from './RadioListItemBare.vue'
 import SnackbarBare from './SnackbarBare.vue'
 import SwitchBare from './SwitchBare.vue'
+import TelephoneInputBare from './TelephoneInputBare.vue'
 import TextAreaBare from './TextAreaBare.vue'
 import TextInputBare from './TextInputBare.vue'
 
@@ -13,6 +14,7 @@ export * from './RadioListBare.vue'
 export * from './RadioListItemBare.vue'
 export * from './SnackbarBare.vue'
 export * from './SwitchBare.vue'
+export * from './TelephoneInputBare.vue'
 export * from './TextAreaBare.vue'
 export * from './TextInputBare.vue'
 export * from './types'
@@ -24,6 +26,7 @@ export {
   RadioListItemBare,
   SnackbarBare,
   SwitchBare,
+  TelephoneInputBare,
   TextAreaBare,
   TextInputBare,
 }

@@ -145,6 +145,35 @@ Optional props:
 />
 ```
 
+### TelephoneInputBare
+
+A specialized input component for phone numbers that handles formatting and E.164 standardization. The component automatically formats US phone numbers for display while maintaining E.164 format for the actual value.
+
+Required props:
+
+- `autocomplete`: 'tel' | 'off'
+- `class`: ClassValue
+- `id`: string
+- `name`: string
+- `placeholder`: string
+
+Optional props:
+
+- `autofocus`: boolean
+- `disabled`: boolean
+- `value`: string
+
+```vue
+<TelephoneInputBare
+  v-model="phoneNumber"
+  id="phone"
+  name="phone"
+  autocomplete="tel"
+  placeholder="(555) 555-5555"
+  class="phone-input-class"
+/>
+```
+
 ### RadioListBare and RadioListItemBare
 
 Components for creating radio button groups.
@@ -192,16 +221,21 @@ Required props:
 - `show`: boolean
 - `showClass`: string (CSS class for showing the snackbar)
 
+```ts
+import { useSnackbarStore } from 'vue-bare-composables'
+
+const snackbarStore = useSnackbarStore()
+const { message, actions } = storeToRefs(snackbarStore)
+```
+
 ```vue
 <SnackbarBare
-  v-model="isVisible"
-  :show="true"
+  :message
+  :actions
   show-class="opacity-100 translate-y-0"
   hide-class="opacity-0 translate-y-2"
   class="snackbar-class"
->
-  <div>Operation completed successfully</div>
-</SnackbarBare>
+/>
 ```
 
 ### SwitchBare

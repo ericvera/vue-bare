@@ -27,6 +27,9 @@
   "peerDependencies": {
     "vue": "^3.5.0"
   },
+  "dependencies": {
+    "e164num": "^1.0.1"
+  },
   "devDependencies": {
     "@eslint/js": "^9.20.0",
     "@tsconfig/strictest": "^2.0.5",
