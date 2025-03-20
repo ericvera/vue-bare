@@ -19,8 +19,8 @@ All components support `v-model` binding for seamless two-way data binding in yo
 
 ## Requirements
 
-- Vue 3
-- Node.js >= 20
+- Vue 3.x
+- Node.js >= 22
 
 ## Components
 
