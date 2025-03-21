@@ -64,6 +64,13 @@ const handleInput = (event: Event) => {
   const input = event.target as HTMLInputElement
   const value = input.value
 
+  // Handle empty input case
+  if (!value || value.trim() === '') {
+    model.value = ''
+    input.value = ''
+    return
+  }
+
   // Filter out non-digit and non-plus characters
   const filteredValue = value.replace(/[^\d+]/g, '')
 
@@ -95,7 +102,12 @@ const handleInput = (event: Event) => {
 
 watchEffect(() => {
   if (props.value !== undefined) {
-    model.value = getPartialE164PhoneNumber(props.value)
+    // Handle empty value case
+    if (!props.value || props.value.trim() === '') {
+      model.value = ''
+    } else {
+      model.value = getPartialE164PhoneNumber(props.value)
+    }
   }
 })
 
@@ -108,7 +120,7 @@ const passtroughProps = computed(() => {
 
 <template>
   <input
-    :value="formatPartialUSPhoneNumber(model)"
+    :value="model ? formatPartialUSPhoneNumber(model) : ''"
     type="tel"
     autocapitalize="none"
     inputmode="tel"

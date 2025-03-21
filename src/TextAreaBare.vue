@@ -129,18 +129,23 @@ const keypressHandler = (e: KeyboardEvent) => {
   }
 }
 
-// Dispose of input beyond maxCharacters
-const changeHandler = (e: Event) => {
-  if (props.maxCharacters === undefined) {
-    return
-  }
-
+// Handle input and change events, ensuring value respects maxCharacters
+const handleInput = (e: Event) => {
   const target = e.target as HTMLTextAreaElement
-  const trimmedValue = target.value.slice(0, props.maxCharacters)
 
-  // Ensure that values stay in sync
-  target.value = trimmedValue
-  model.value = trimmedValue
+  // If maxCharacters is set, always ensure value respects the limit
+  if (props.maxCharacters !== undefined) {
+    const inputValue = target.value.slice(0, props.maxCharacters)
+
+    // Always update the input field with the potentially trimmed value
+    target.value = inputValue
+
+    // Set the model value to the trimmed value
+    model.value = inputValue
+  } else {
+    // Just update the model with the original value
+    model.value = target.value
+  }
 
   resize()
 }
@@ -162,8 +167,8 @@ watchEffect(() => {
     inputmode="text"
     v-bind="passtroughProps"
     @keypress="keypressHandler"
-    @input="changeHandler"
-    @change="changeHandler"
+    @input="handleInput"
+    @change="handleInput"
     @focus="$emit('focus')"
     @blur="$emit('blur')"
   />
