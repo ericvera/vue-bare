@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watchEffect } from 'vue'
+import { computed, useTemplateRef, watchEffect } from 'vue'
 import { ClassValue } from './types'
 
 export interface PasswordInputBareProps {
@@ -22,6 +22,13 @@ interface Props extends PasswordInputBareProps {
 }
 
 const props = defineProps<Props>()
+const inputRef = useTemplateRef<HTMLInputElement>('input-ref')
+
+defineExpose({
+  focus: () => {
+    inputRef.value?.focus()
+  },
+})
 
 const model = defineModel({
   type: String,
@@ -42,6 +49,7 @@ const passtroughProps = computed(() => {
 
 <template>
   <input
+    ref="input-ref"
     v-model="model"
     type="password"
     autocapitalize="none"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { formatPartialUSPhoneNumber, getPartialE164PhoneNumber } from 'e164num'
-import { computed, watchEffect } from 'vue'
+import { computed, useTemplateRef, watchEffect } from 'vue'
 import { ClassValue } from './types'
 
 export interface TelephoneInputBareProps {
@@ -24,6 +24,13 @@ interface Props extends TelephoneInputBareProps {
 }
 
 const props = defineProps<Props>()
+const inputRef = useTemplateRef<HTMLInputElement>('input-ref')
+
+defineExpose({
+  focus: () => {
+    inputRef.value?.focus()
+  },
+})
 
 const model = defineModel({
   type: String,
@@ -120,6 +127,7 @@ const passtroughProps = computed(() => {
 
 <template>
   <input
+    ref="input-ref"
     :value="model ? formatPartialUSPhoneNumber(model) : ''"
     type="tel"
     autocapitalize="none"

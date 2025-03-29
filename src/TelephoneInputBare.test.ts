@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import TelephoneInputBare from './TelephoneInputBare.vue'
 
 const createWrapper = (props = {}) =>
@@ -228,4 +228,19 @@ it('handles input formatting without losing cursor context', async () => {
   expect(step3).not.toBe(step2)
 
   expect(input.element.value).toMatchInlineSnapshot(`"(23"`)
+})
+
+it('exposes focus method', () => {
+  const wrapper = createWrapper()
+  const input = wrapper.find('input')
+
+  // Mock the focus method
+  const focusSpy = vi.spyOn(input.element, 'focus')
+
+  // Focus the input
+  const vm = wrapper.vm as { focus: () => void }
+  vm.focus()
+
+  // Verify focus was called
+  expect(focusSpy).toHaveBeenCalled()
 })
