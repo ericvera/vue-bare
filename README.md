@@ -45,8 +45,13 @@ Optional props:
 - `disabled`: boolean
 - `value`: string
 
+Exposed methods:
+
+- `focus()`: Programmatically focus the input element
+
 ```vue
 <TextInputBare
+  ref="textInput"
   v-model="text"
   id="my-input"
   name="my-input"
@@ -57,6 +62,7 @@ Optional props:
   inputmode="text"
   :spellcheck="false"
 />
+<button @click="textInput.focus()">Focus Input</button>
 ```
 
 ### EmailInputBare
@@ -77,14 +83,20 @@ Optional props:
 - `placeholder`: string
 - `value`: string
 
+Exposed methods:
+
+- `focus()`: Programmatically focus the input element
+
 ```vue
 <EmailInputBare
+  ref="emailInput"
   v-model="email"
   id="email-input"
   name="email"
   autocomplete="username"
   class="email-input-class"
 />
+<button @click="emailInput.focus()">Focus Input</button>
 ```
 
 ### TextAreaBare
@@ -135,14 +147,20 @@ Optional props:
 - `disabled`: boolean
 - `value`: string
 
+Exposed methods:
+
+- `focus()`: Programmatically focus the input element
+
 ```vue
 <PasswordInputBare
+  ref="passwordInput"
   v-model="password"
   id="password"
   name="password"
   autocomplete="current-password"
   class="password-input-class"
 />
+<button @click="passwordInput.focus()">Focus Input</button>
 ```
 
 ### TelephoneInputBare
@@ -163,8 +181,13 @@ Optional props:
 - `disabled`: boolean
 - `value`: string
 
+Exposed methods:
+
+- `focus()`: Programmatically focus the input element
+
 ```vue
 <TelephoneInputBare
+  ref="phoneInput"
   v-model="phoneNumber"
   id="phone"
   name="phone"
@@ -172,6 +195,7 @@ Optional props:
   placeholder="(555) 555-5555"
   class="phone-input-class"
 />
+<button @click="phoneInput.focus()">Focus Input</button>
 ```
 
 ### RadioListBare and RadioListItemBare
