@@ -83,19 +83,24 @@ const getLineHeight = () => {
     return 0
   }
 
-  let computedStyles = window.getComputedStyle(element.value)
-
-  const oneLineHeight =
-    element.value?.scrollHeight - getTotalPadding(computedStyles)
-
-  element.value.rows = 2
-
-  computedStyles = window.getComputedStyle(element.value)
-
-  const twoLineHeight =
-    element.value?.scrollHeight - getTotalPadding(computedStyles)
-
+  // Store original value set to empty to force single line height calculation
+  const originalValue = element.value.value
+  element.value.value = ''
   element.value.rows = 1
+
+  const computedStyles = window.getComputedStyle(element.value)
+  const oneLineHeight =
+    element.value.scrollHeight - getTotalPadding(computedStyles)
+
+  // Set to new line and then two rows to force double line height calculation
+  element.value.value = '\n'
+  element.value.rows = 2
+  const twoLineHeight =
+    element.value.scrollHeight - getTotalPadding(computedStyles)
+
+  // Restore original state
+  element.value.rows = 1
+  element.value.value = originalValue
 
   return twoLineHeight - oneLineHeight
 }
