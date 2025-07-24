@@ -17,7 +17,7 @@ export * from './SwitchBare.vue'
 export * from './TelephoneInputBare.vue'
 export * from './TextAreaBare.vue'
 export * from './TextInputBare.vue'
-export * from './types'
+export * from './types.js'
 
 export {
   EmailInputBare,
