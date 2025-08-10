@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils'
+import { nextTick } from 'vue'
 import { expect, it, vi } from 'vitest'
 import PasswordInputBare from './PasswordInputBare.vue'
 
@@ -157,4 +158,185 @@ it('exposes focus method', () => {
 
   // Verify focus was called
   expect(focusSpy).toHaveBeenCalled()
+})
+
+it('renders without wrapper div when toggleable is false', () => {
+  const wrapper = createWrapper({ toggleable: false })
+
+  expect(wrapper.find('div').exists()).toBe(false)
+  expect(wrapper.find('input').exists()).toBe(true)
+  expect(wrapper.find('input').attributes('type')).toBe('password')
+})
+
+it('renders with wrapper div when toggleable is true', () => {
+  const wrapper = createWrapper({ toggleable: true })
+
+  expect(wrapper.find('div').exists()).toBe(true)
+  expect(wrapper.find('input').exists()).toBe(true)
+  expect(wrapper.find('input').attributes('type')).toBe('password')
+})
+
+it('applies wrapper class when toggleable is true', () => {
+  const wrapper = createWrapper({
+    toggleable: true,
+    wrapperClass: 'wrapper-test-class',
+  })
+
+  const div = wrapper.find('div')
+  expect(div.exists()).toBe(true)
+  expect(div.attributes('class')).toBe('wrapper-test-class')
+})
+
+it('exposes toggleVisibility method and isVisible ref', async () => {
+  const wrapper = createWrapper({ toggleable: true })
+  const vm = wrapper.vm as { toggleVisibility: () => void; isVisible: boolean }
+
+  // Initially should be hidden
+  expect(vm.isVisible).toBe(false)
+  expect(wrapper.find('input').attributes('type')).toBe('password')
+
+  // Toggle visibility
+  vm.toggleVisibility()
+  await nextTick()
+
+  // Should now be visible
+  expect(vm.isVisible).toBe(true)
+  expect(wrapper.find('input').attributes('type')).toBe('text')
+
+  // Toggle back
+  vm.toggleVisibility()
+  await nextTick()
+
+  // Should be hidden again
+  expect(vm.isVisible).toBe(false)
+  expect(wrapper.find('input').attributes('type')).toBe('password')
+})
+
+it('provides slot props for toggle', () => {
+  let capturedProps: unknown = null
+
+  mount(PasswordInputBare, {
+    props: {
+      id: 'password-input',
+      name: 'password',
+      autocomplete: 'current-password',
+      class: 'test-class',
+      toggleable: true,
+    },
+    slots: {
+      toggle: (props: unknown) => {
+        capturedProps = props
+        return 'test'
+      },
+    },
+  })
+
+  // Verify slot props are provided
+  expect(capturedProps).not.toBeNull()
+  const slotProps = capturedProps as { isVisible: boolean; toggle: () => void }
+  expect(slotProps.isVisible).toBe(false)
+  expect(typeof slotProps.toggle).toBe('function')
+})
+
+it('renders custom toggle content via slot', () => {
+  const wrapper = mount(PasswordInputBare, {
+    props: {
+      id: 'password-input',
+      name: 'password',
+      autocomplete: 'current-password',
+      class: 'test-class',
+      toggleable: true,
+    },
+    slots: {
+      toggle: '<button class="custom-toggle">Toggle</button>',
+    },
+  })
+
+  expect(wrapper.find('button.custom-toggle').exists()).toBe(true)
+})
+
+it('maintains autocomplete attribute when toggling visibility', async () => {
+  const wrapper = createWrapper({
+    toggleable: true,
+    autocomplete: 'new-password',
+  })
+
+  const vm = wrapper.vm as { toggleVisibility: () => void }
+  const input = wrapper.find('input')
+
+  // Check initial autocomplete
+  expect(input.attributes('autocomplete')).toBe('new-password')
+
+  // Toggle to visible
+  vm.toggleVisibility()
+  await nextTick()
+
+  // Autocomplete should be maintained
+  expect(input.attributes('autocomplete')).toBe('new-password')
+
+  // Toggle back to hidden
+  vm.toggleVisibility()
+  await nextTick()
+
+  // Still should have autocomplete
+  expect(input.attributes('autocomplete')).toBe('new-password')
+})
+
+it('slot receives correct isVisible and toggle props', async () => {
+  let capturedProps: unknown = null
+
+  const wrapper = mount(PasswordInputBare, {
+    props: {
+      id: 'password-input',
+      name: 'password',
+      autocomplete: 'current-password',
+      class: 'test-class',
+      toggleable: true,
+    },
+    slots: {
+      toggle: (props: unknown) => {
+        capturedProps = props
+        return ''
+      },
+    },
+  })
+
+  // Initially isVisible should be false
+  const slotProps = capturedProps as { isVisible: boolean; toggle: () => void }
+  expect(slotProps.isVisible).toBe(false)
+  expect(typeof slotProps.toggle).toBe('function')
+
+  // Call toggle function
+  slotProps.toggle()
+  await nextTick()
+
+  // Verify input type changed (this confirms toggle worked)
+  expect(wrapper.find('input').attributes('type')).toBe('text')
+
+  // After toggle, the slot would be re-rendered with new props
+  // We can verify by checking the component's exposed state
+  const vm = wrapper.vm as { isVisible: boolean }
+  expect(vm.isVisible).toBe(true)
+})
+
+it('does not render toggle slot when toggleable is false', () => {
+  const wrapper = mount(PasswordInputBare, {
+    props: {
+      id: 'password-input',
+      name: 'password',
+      autocomplete: 'current-password',
+      class: 'test-class',
+      toggleable: false,
+    },
+    slots: {
+      toggle: '<button>Toggle</button>',
+    },
+  })
+
+  // Button should not be rendered
+  expect(wrapper.find('button').exists()).toBe(false)
+  // No wrapper div
+  expect(wrapper.find('div').exists()).toBe(false)
+  // Input should exist directly
+  expect(wrapper.find('input').exists()).toBe(true)
 })

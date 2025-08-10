@@ -147,7 +147,7 @@ Optional props:
 
 ### PasswordInputBare
 
-A specialized input component for password entry with appropriate defaults (e.g. type=password, autocapitalize=none, inputmode=text, spellcheck=false).
+A specialized input component for password entry with appropriate defaults (e.g. type=password, autocapitalize=none, inputmode=text, spellcheck=false). Supports an optional show/hide toggle functionality.
 
 Required props:
 
@@ -160,13 +160,18 @@ Optional props:
 
 - `autofocus`: boolean
 - `disabled`: boolean
+- `toggleable`: boolean - Enables show/hide password functionality
 - `value`: string
+- `wrapperClass`: ClassValue - CSS class for the wrapper div when toggleable is enabled
 
-Exposed methods:
+Exposed methods and properties:
 
 - `focus()`: Programmatically focus the input element
+- `toggleVisibility()`: Toggle password visibility (when toggleable is true)
+- `isVisible`: boolean - Current visibility state (when toggleable is true)
 
 ```vue
+<!-- Basic password input -->
 <PasswordInputBare
   ref="passwordInput"
   v-model="password"
@@ -176,7 +181,33 @@ Exposed methods:
   class="password-input-class"
 />
 <button @click="passwordInput.focus()">Focus Input</button>
+
+<!-- With show/hide toggle functionality -->
+<PasswordInputBare
+  v-model="password"
+  id="password"
+  name="password"
+  autocomplete="current-password"
+  class="password-input-class"
+  :toggleable="true"
+  wrapper-class="password-wrapper"
+>
+  <template #toggle="{ isVisible, toggle }">
+    <button @click="toggle" type="button">
+      {{ isVisible ? 'Hide' : 'Show' }}
+    </button>
+  </template>
+</PasswordInputBare>
 ```
+
+When `toggleable` is enabled:
+
+- The input is wrapped in a div with the class specified by `wrapperClass`
+- A `toggle` slot is available that receives `isVisible` (boolean) and `toggle` (function) as slot props
+- The toggle slot content is rendered after the input element in the DOM
+- Use CSS (e.g., flexbox with `flex-direction: row-reverse` or CSS Grid) to visually position the toggle before the input if needed
+- The input type switches between "password" and "text" based on visibility
+- The `autocomplete` attribute is maintained regardless of visibility state for security
 
 ### TelephoneInputBare
 
