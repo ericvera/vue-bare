@@ -96,9 +96,12 @@ const handleInput = (event: Event) => {
   // Get cursor position before updating the value
   const cursorPosition = input.selectionStart
 
+  // Directly set input.value to ensure immediate UI update
+  // This is synchronous and doesn't require nextTick
   input.value = formattedValue
 
   // Fix cursor position to account for formatting
+  // Can be set immediately since we directly control the input value above
   const newCursorPosition = getNewCursorPosition(
     value,
     cursorPosition ?? 0,

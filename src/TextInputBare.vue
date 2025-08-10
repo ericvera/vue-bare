@@ -36,6 +36,7 @@ export interface TextInputBareProps {
   autofocus?: boolean
   class?: ClassValue
   disabled?: boolean
+  trimStart?: boolean
   value?: string
 }
 
@@ -59,18 +60,69 @@ const model = defineModel({
   default: '',
 })
 
+const handleInput = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const value = input.value
+
+  // If trimStart is not enabled, just update the model
+  if (!props.trimStart) {
+    model.value = value
+    return
+  }
+
+  // Handle empty input case when trimStart is enabled
+  if (!value || value.trim() === '') {
+    model.value = ''
+    input.value = ''
+    return
+  }
+
+  // Check if there are leading spaces to trim
+  if (value === value.trimStart()) {
+    model.value = value
+    return
+  }
+
+  const cursorPosition = input.selectionStart ?? 0
+  const spacesRemoved = value.length - value.trimStart().length
+
+  // Apply trimStart
+  const trimmedValue = value.trimStart()
+  model.value = trimmedValue
+
+  // Directly update input value to ensure UI updates
+  input.value = trimmedValue
+
+  // Adjust cursor position
+  const newCursorPosition = Math.max(0, cursorPosition - spacesRemoved)
+  input.setSelectionRange(newCursorPosition, newCursorPosition)
+}
+
 watchEffect(() => {
   if (props.value !== undefined) {
-    model.value = props.value
+    let newValue = props.value
+
+    // Apply trimStart if enabled and value is being set programmatically
+    if (props.trimStart && newValue) {
+      newValue = newValue.trimStart()
+    }
+
+    model.value = newValue
   }
 })
 
 const passtroughProps = computed(() => {
-  const { value, ...rest } = props
+  const { value, trimStart, ...rest } = props
   return rest
 })
 </script>
 
 <template>
-  <input ref="input-ref" v-model="model" type="text" v-bind="passtroughProps" />
+  <input
+    ref="input-ref"
+    :value="model"
+    type="text"
+    v-bind="passtroughProps"
+    @input="handleInput"
+  />
 </template>

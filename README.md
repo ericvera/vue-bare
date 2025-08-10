@@ -43,6 +43,7 @@ Optional props:
 
 - `autofocus`: boolean
 - `disabled`: boolean
+- `trimStart`: boolean - Automatically removes leading whitespace from user input
 - `value`: string
 
 Exposed methods:
@@ -63,6 +64,20 @@ Exposed methods:
   :spellcheck="false"
 />
 <button @click="textInput.focus()">Focus Input</button>
+
+<!-- With trimStart to prevent leading spaces -->
+<TextInputBare
+  v-model="username"
+  id="username"
+  name="username"
+  class="username-input"
+  placeholder="Enter username"
+  autocomplete="off"
+  autocapitalize="none"
+  inputmode="text"
+  :spellcheck="false"
+  :trimStart="true"
+/>
 ```
 
 ### EmailInputBare

@@ -161,3 +161,160 @@ it('exposes focus method', () => {
   // Verify focus was called
   expect(focusSpy).toHaveBeenCalled()
 })
+
+it('trims leading spaces when trimStart is true', async () => {
+  const wrapper = createWrapper({ trimStart: true })
+  const input = wrapper.find('input')
+  const inputElement = input.element
+
+  // Simulate user typing with leading spaces
+  inputElement.value = '   hello world'
+  await input.trigger('input')
+
+  // Should emit the trimmed value
+  expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
+    [
+      "hello world",
+    ]
+  `)
+
+  // Input should show the trimmed value
+  expect(inputElement.value).toBe('hello world')
+})
+
+it('does not trim leading spaces when trimStart is false', async () => {
+  const wrapper = createWrapper({ trimStart: false })
+  const input = wrapper.find('input')
+
+  // Type text with leading spaces
+  await input.setValue('   hello world')
+  await input.trigger('input')
+
+  // Should emit the value with spaces
+  expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
+    [
+      "   hello world",
+    ]
+  `)
+
+  // Input should keep the spaces
+  expect(input.element.value).toBe('   hello world')
+})
+
+it('does not trim leading spaces when trimStart is not provided', async () => {
+  const wrapper = createWrapper()
+  const input = wrapper.find('input')
+
+  // Type text with leading spaces
+  await input.setValue('   hello world')
+  await input.trigger('input')
+
+  // Should emit the value with spaces (default behavior)
+  expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
+    [
+      "   hello world",
+    ]
+  `)
+
+  // Input should keep the spaces
+  expect(input.element.value).toBe('   hello world')
+})
+
+it('handles only spaces input when trimStart is true', async () => {
+  const wrapper = createWrapper({ trimStart: true })
+  const input = wrapper.find('input')
+  const inputElement = input.element
+
+  // First type some text to ensure we're starting from a non-empty state
+  inputElement.value = 'test'
+  await input.trigger('input')
+
+  // Now type only spaces
+  inputElement.value = '     '
+  await input.trigger('input')
+
+  // Should emit empty string (check the second emission)
+  expect(wrapper.emitted('update:modelValue')?.[1]).toMatchInlineSnapshot(`
+    [
+      "",
+    ]
+  `)
+
+  // Input should be empty
+  expect(inputElement.value).toBe('')
+})
+
+it('preserves trailing spaces when trimStart is true', async () => {
+  const wrapper = createWrapper({ trimStart: true })
+  const input = wrapper.find('input')
+
+  // Type text with trailing spaces (no leading spaces)
+  await input.setValue('hello world   ')
+  await input.trigger('input')
+
+  // Should keep trailing spaces
+  expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
+    [
+      "hello world   ",
+    ]
+  `)
+
+  // Input should keep trailing spaces
+  expect(input.element.value).toBe('hello world   ')
+})
+
+it('trims leading spaces from initial value when trimStart is true', () => {
+  const wrapper = createWrapper({
+    trimStart: true,
+    value: '   initial value',
+  })
+  const input = wrapper.find('input')
+
+  // Should display trimmed initial value
+  expect(input.element.value).toBe('initial value')
+})
+
+it('trims leading spaces when value prop changes and trimStart is true', async () => {
+  const wrapper = createWrapper({
+    trimStart: true,
+    value: 'first value',
+  })
+  const input = wrapper.find('input')
+
+  // Initial value should be as is (no leading spaces)
+  expect(input.element.value).toBe('first value')
+
+  // Update prop with leading spaces
+  await wrapper.setProps({ value: '   updated value' })
+
+  // Should display trimmed value
+  expect(input.element.value).toBe('updated value')
+})
+
+it('handles mixed whitespace when trimStart is true', async () => {
+  const wrapper = createWrapper({ trimStart: true })
+  const input = wrapper.find('input')
+  const inputElement = input.element
+
+  // Simulate typing text with tabs and spaces
+  inputElement.value = '\t  \t hello'
+  await input.trigger('input')
+
+  // Should trim all leading whitespace
+  expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
+    [
+      "hello",
+    ]
+  `)
+
+  // Input should show trimmed value
+  expect(inputElement.value).toBe('hello')
+})
+
+it('does not affect trimStart prop attribute on input element', () => {
+  const wrapper = createWrapper({ trimStart: true })
+  const input = wrapper.find('input')
+
+  // trimStart should not be passed as an HTML attribute
+  expect(input.attributes('trimstart')).toBeUndefined()
+})
