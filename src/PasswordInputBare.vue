@@ -35,8 +35,9 @@ defineExpose({
   focus: () => {
     inputRef.value?.focus()
   },
-  toggleVisibility,
-  isVisible,
+  blur: () => {
+    inputRef.value?.blur()
+  },
 })
 
 const model = defineModel({

@@ -49,6 +49,7 @@ Optional props:
 Exposed methods:
 
 - `focus()`: Programmatically focus the input element
+- `blur()`: Programmatically blur the input element
 
 ```vue
 <TextInputBare
@@ -101,6 +102,7 @@ Optional props:
 Exposed methods:
 
 - `focus()`: Programmatically focus the input element
+- `blur()`: Programmatically blur the input element
 
 ```vue
 <EmailInputBare
@@ -134,6 +136,11 @@ Optional props:
 - `maxRows`: number (defaults to 2)
 - `value`: string
 
+Exposed methods:
+
+- `focus()`: Programmatically focus the textarea element
+- `blur()`: Programmatically blur the textarea element
+
 ```vue
 <TextAreaBare
   v-model="text"
@@ -164,11 +171,10 @@ Optional props:
 - `value`: string
 - `wrapperClass`: ClassValue - CSS class for the wrapper div when toggleable is enabled
 
-Exposed methods and properties:
+Exposed methods:
 
 - `focus()`: Programmatically focus the input element
-- `toggleVisibility()`: Toggle password visibility (when toggleable is true)
-- `isVisible`: boolean - Current visibility state (when toggleable is true)
+- `blur()`: Programmatically blur the input element
 
 ```vue
 <!-- Basic password input -->
@@ -230,6 +236,7 @@ Optional props:
 Exposed methods:
 
 - `focus()`: Programmatically focus the input element
+- `blur()`: Programmatically blur the input element
 
 ```vue
 <TelephoneInputBare
