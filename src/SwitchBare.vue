@@ -9,6 +9,7 @@ export interface SwitchBareProps {
   class?: ClassValue
   disabled?: boolean
   value?: boolean
+  modelValue?: boolean
 }
 
 interface Props extends SwitchBareProps {
