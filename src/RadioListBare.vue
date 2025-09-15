@@ -14,6 +14,7 @@ export interface RadioListBareProps {
   class?: ClassValue
   disabled?: boolean
   value?: string
+  modelValue?: string
 }
 
 const props = defineProps<RadioListBareProps>()

@@ -16,6 +16,7 @@ export interface TelephoneInputBareProps {
   autofocus?: boolean
   class?: ClassValue
   disabled?: boolean
+  modelValue?: string
   value?: string
 }
 

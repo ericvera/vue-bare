@@ -37,6 +37,7 @@ export interface TextInputBareProps {
   class?: ClassValue
   disabled?: boolean
   trimStart?: boolean
+  modelValue?: string
   value?: string
 }
 

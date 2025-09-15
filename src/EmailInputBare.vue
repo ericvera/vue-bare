@@ -15,6 +15,7 @@ export interface EmailInputBareProps {
   class?: ClassValue
   disabled?: boolean
   placeholder?: string
+  modelValue?: string
   value?: string
 }
 

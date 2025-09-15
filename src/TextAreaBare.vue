@@ -16,6 +16,7 @@ export interface TextAreaBareProps {
   disabled?: boolean
   maxCharacters?: number
   maxRows?: number
+  modelValue?: string
   value?: string
 }
 

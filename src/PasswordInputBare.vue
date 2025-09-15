@@ -15,6 +15,7 @@ export interface PasswordInputBareProps {
   class?: ClassValue
   disabled?: boolean
   toggleable?: boolean
+  modelValue?: string
   value?: string
   wrapperClass?: ClassValue
 }
