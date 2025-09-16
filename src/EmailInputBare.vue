@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useTemplateRef, watchEffect } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 import { ClassValue } from './types'
 
 export interface EmailInputBareProps {
@@ -35,19 +35,23 @@ defineExpose({
   },
 })
 
-const model = defineModel({
-  type: String,
-  default: '',
-})
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+}>()
 
-watchEffect(() => {
-  if (props.value !== undefined) {
-    model.value = props.value
-  }
-})
+const updateValue = (value: string) => {
+  emit('update:modelValue', value)
+}
+
+const handleChange = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  updateValue(input.value)
+}
+
+const effectiveValue = computed(() => props.modelValue ?? props.value ?? '')
 
 const passtroughProps = computed(() => {
-  const { value, placeholder, ...rest } = props
+  const { value, modelValue, placeholder, ...rest } = props
 
   return {
     ...rest,
@@ -59,12 +63,13 @@ const passtroughProps = computed(() => {
 <template>
   <input
     ref="input-ref"
-    v-model="model"
+    :value="effectiveValue"
     type="email"
     autocapitalize="none"
     inputmode="email"
     spellcheck="false"
     v-bind="passtroughProps"
     @keypress.prevent.space
+    @change="handleChange"
   />
 </template>

@@ -80,7 +80,6 @@ it('handles empty input correctly', async () => {
 
   // Set a value first
   await textarea.setValue('test value')
-  await textarea.trigger('input')
 
   // Check the emitted event for the value
   expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
@@ -91,7 +90,6 @@ it('handles empty input correctly', async () => {
 
   // Now clear it
   await textarea.setValue('')
-  await textarea.trigger('input')
 
   // Check the emitted event for empty string
   expect(wrapper.emitted('update:modelValue')?.[1]).toMatchInlineSnapshot(`

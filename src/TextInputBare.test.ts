@@ -55,7 +55,7 @@ it('handles empty input correctly', async () => {
 
   // Set a value first
   await input.setValue('test value')
-  await input.trigger('input')
+  // Don't manually trigger input - setValue already does it
 
   // Check the emitted event for the value
   expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
@@ -66,9 +66,9 @@ it('handles empty input correctly', async () => {
 
   // Now clear it
   await input.setValue('')
-  await input.trigger('input')
+  // Don't manually trigger input - setValue already does it
 
-  // Check the emitted event for empty string
+  // Check the emitted event for empty string (now at index [1])
   expect(wrapper.emitted('update:modelValue')?.[1]).toMatchInlineSnapshot(`
     [
       "",
@@ -107,7 +107,6 @@ it('emits events when user types', async () => {
 
   // Type something
   await input.setValue('user input')
-  await input.trigger('input')
 
   // Verify the event was emitted with the correct value
   expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
@@ -126,7 +125,6 @@ it('respects disabled attribute', async () => {
 
   // Try to set a value (shouldn't work because it's disabled)
   await input.setValue('test input')
-  await input.trigger('input')
 
   // Cannot emit events when disabled
   expect(wrapper.emitted('update:modelValue')).toBeUndefined()
@@ -188,7 +186,6 @@ it('does not trim leading spaces when trimStart is false', async () => {
 
   // Type text with leading spaces
   await input.setValue('   hello world')
-  await input.trigger('input')
 
   // Should emit the value with spaces
   expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
@@ -207,7 +204,6 @@ it('does not trim leading spaces when trimStart is not provided', async () => {
 
   // Type text with leading spaces
   await input.setValue('   hello world')
-  await input.trigger('input')
 
   // Should emit the value with spaces (default behavior)
   expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
@@ -250,7 +246,6 @@ it('preserves trailing spaces when trimStart is true', async () => {
 
   // Type text with trailing spaces (no leading spaces)
   await input.setValue('hello world   ')
-  await input.trigger('input')
 
   // Should keep trailing spaces
   expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`

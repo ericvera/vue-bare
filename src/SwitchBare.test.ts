@@ -44,17 +44,6 @@ it('does not emit update event initially when no value is specified', () => {
   expect(wrapper.emitted('update:modelValue')).toBeUndefined()
 })
 
-it('sets initial value correctly when provided', () => {
-  const wrapper = createWrapper({ value: true })
-
-  // Should emit the initial value on mount
-  expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
-    [
-      true,
-    ]
-  `)
-})
-
 it('toggles value when clicked', async () => {
   const wrapper = createWrapper()
   const switchDiv = wrapper.find('div')
@@ -71,6 +60,9 @@ it('toggles value when clicked', async () => {
       true,
     ]
   `)
+
+  // Update the prop to simulate v-model binding
+  await wrapper.setProps({ modelValue: true })
 
   // Click again to change state to false
   await switchDiv.trigger('click')
@@ -89,22 +81,14 @@ it('updates value when props change', async () => {
   // Update the prop to true
   await wrapper.setProps({ value: true })
 
-  // Should emit true
-  expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
-    [
-      true,
-    ]
-  `)
+  // Should not emit when value prop changes
+  expect(wrapper.emitted('update:modelValue')).toBeUndefined()
 
   // Update the prop to false
   await wrapper.setProps({ value: false })
 
-  // Should emit false
-  expect(wrapper.emitted('update:modelValue')?.[1]).toMatchInlineSnapshot(`
-    [
-      false,
-    ]
-  `)
+  // Should still not emit
+  expect(wrapper.emitted('update:modelValue')).toBeUndefined()
 })
 
 it('does not toggle when disabled', async () => {

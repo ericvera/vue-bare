@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, useTemplateRef, watchEffect } from 'vue'
-import { ClassValue } from './types'
+import { computed, useTemplateRef } from 'vue'
+import { ClassValue } from './types.js'
 
 export interface TextInputBareProps {
   /**
@@ -17,8 +17,10 @@ export interface TextInputBareProps {
     | 'name'
     | 'address-line1'
     | 'address-line2'
-    | 'address-level1' // for US, State
-    | 'address-level2' // for US, City
+    // for US, State
+    | 'address-level1'
+    // for US, City
+    | 'address-level2'
     | 'postal-code'
     | 'tel'
   id: string
@@ -59,10 +61,13 @@ defineExpose({
   },
 })
 
-const model = defineModel({
-  type: String,
-  default: '',
-})
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+}>()
+
+const updateValue = (value: string) => {
+  emit('update:modelValue', value)
+}
 
 const handleInput = (event: Event) => {
   const input = event.target as HTMLInputElement
@@ -70,20 +75,20 @@ const handleInput = (event: Event) => {
 
   // If trimStart is not enabled, just update the model
   if (!props.trimStart) {
-    model.value = value
+    updateValue(value)
     return
   }
 
   // Handle empty input case when trimStart is enabled
   if (!value || value.trim() === '') {
-    model.value = ''
+    updateValue('')
     input.value = ''
     return
   }
 
   // Check if there are leading spaces to trim
   if (value === value.trimStart()) {
-    model.value = value
+    updateValue(value)
     return
   }
 
@@ -92,7 +97,7 @@ const handleInput = (event: Event) => {
 
   // Apply trimStart
   const trimmedValue = value.trimStart()
-  model.value = trimmedValue
+  updateValue(trimmedValue)
 
   // Directly update input value to ensure UI updates
   input.value = trimmedValue
@@ -102,21 +107,19 @@ const handleInput = (event: Event) => {
   input.setSelectionRange(newCursorPosition, newCursorPosition)
 }
 
-watchEffect(() => {
-  if (props.value !== undefined) {
-    let newValue = props.value
+const effectiveValue = computed(() => {
+  const value = props.modelValue ?? props.value ?? ''
 
-    // Apply trimStart if enabled and value is being set programmatically
-    if (props.trimStart && newValue) {
-      newValue = newValue.trimStart()
-    }
-
-    model.value = newValue
+  // Apply trimStart if enabled
+  if (props.trimStart && value) {
+    return value.trimStart()
   }
+
+  return value
 })
 
 const passtroughProps = computed(() => {
-  const { value, trimStart, ...rest } = props
+  const { value, modelValue, trimStart, ...rest } = props
   return rest
 })
 </script>
@@ -124,7 +127,7 @@ const passtroughProps = computed(() => {
 <template>
   <input
     ref="input-ref"
-    :value="model"
+    :value="effectiveValue"
     type="text"
     v-bind="passtroughProps"
     @input="handleInput"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { ClassValue } from './types'
 
 export interface TextAreaBareProps {
@@ -28,12 +28,16 @@ const DefaultRows = 2
 
 const props = defineProps<Props>()
 
-const model = defineModel({
-  type: String,
-  default: '',
-})
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+  keypress: [event: KeyboardEvent]
+  focus: [event: FocusEvent]
+  blur: [event: FocusEvent]
+}>()
 
-const emit = defineEmits(['keypress', 'focus', 'blur'])
+const updateValue = (value: string) => {
+  emit('update:modelValue', value)
+}
 
 const calculatedLineHeight = ref(0)
 const element = ref<HTMLTextAreaElement>()
@@ -50,9 +54,12 @@ defineExpose({
   },
 })
 
+const effectiveValue = computed(() => props.modelValue ?? props.value ?? '')
+
 // Remove class from passtroughProps as it is handled separately
 const passtroughProps = computed(() => {
-  const { maxRows, maxCharacters, value, ...rest } = props
+  const { maxRows, maxCharacters, value, modelValue, ...rest } = props
+
   return rest
 })
 
@@ -112,7 +119,7 @@ onMounted(() => {
 
 // Calculate whenever the value changes
 watch(
-  [model, calculatedLineHeight],
+  [effectiveValue, calculatedLineHeight],
   () => {
     resize()
   },
@@ -147,26 +154,20 @@ const handleInput = (e: Event) => {
     target.value = inputValue
 
     // Set the model value to the trimmed value
-    model.value = inputValue
+    updateValue(inputValue)
   } else {
     // Just update the model with the original value
-    model.value = target.value
+    updateValue(target.value)
   }
 
   resize()
 }
-
-watchEffect(() => {
-  if (props.value !== undefined) {
-    model.value = props.value
-  }
-})
 </script>
 
 <template>
   <textarea
     ref="element"
-    v-model="model"
+    :value="effectiveValue"
     rows="1"
     autoComplete="off"
     autocapitalize="sentence"
@@ -174,8 +175,7 @@ watchEffect(() => {
     v-bind="passtroughProps"
     @keypress="keypressHandler"
     @input="handleInput"
-    @change="handleInput"
-    @focus="$emit('focus')"
-    @blur="$emit('blur')"
+    @focus="$emit('focus', $event)"
+    @blur="$emit('blur', $event)"
   />
 </template>

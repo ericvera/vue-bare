@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { provide, watchEffect } from 'vue'
+import { computed, provide } from 'vue'
 import { RadioListInjectionKeys } from './constants'
 import { ClassValue } from './types'
 
@@ -19,18 +19,21 @@ export interface RadioListBareProps {
 
 const props = defineProps<RadioListBareProps>()
 
-const model = defineModel<string>()
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+}>()
 
-const onItemClick = (value: string) => {
-  model.value = value
+const updateValue = (value: string) => {
+  emit('update:modelValue', value)
 }
 
-// Update the model value when the props value changes
-watchEffect(() => {
-  model.value = props.value
-})
+const onItemClick = (value: string) => {
+  updateValue(value)
+}
 
-provide(RadioListInjectionKeys.Value, model)
+const effectiveValue = computed(() => props.modelValue ?? props.value ?? '')
+
+provide(RadioListInjectionKeys.Value, effectiveValue)
 provide(RadioListInjectionKeys.Disabled, props.disabled)
 provide(RadioListInjectionKeys.OnItemClick, onItemClick)
 </script>

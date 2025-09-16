@@ -49,7 +49,6 @@ it('handles empty input correctly', async () => {
 
   // Set a value first
   await input.setValue('12345')
-  await input.trigger('input')
 
   // Check the emitted event for the digits
   expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
@@ -60,7 +59,6 @@ it('handles empty input correctly', async () => {
 
   // Now clear it
   await input.setValue('')
-  await input.trigger('input')
 
   // Check the emitted event for empty string
   expect(wrapper.emitted('update:modelValue')?.[1]).toMatchInlineSnapshot(`
@@ -79,7 +77,6 @@ it('formats phone numbers as user types', async () => {
 
   // Type a phone number
   await input.setValue('2345678901')
-  await input.trigger('input')
 
   // Check the emitted event value
   expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
@@ -101,7 +98,6 @@ it('formats appropriately when the user enters a plus sign for US numbers', asyn
 
   // Input with plus sign
   await input.setValue('+12345678901')
-  await input.trigger('input')
 
   // Check that events were emitted with the correct value
   expect(wrapper.emitted()).toHaveProperty('update:modelValue')
@@ -123,7 +119,6 @@ it('formats appropriately when the user enters a plus sign for international num
 
   // Input with plus sign
   await input.setValue('+3')
-  await input.trigger('input')
 
   // Check that events were emitted with the correct value
   expect(wrapper.emitted()).toHaveProperty('update:modelValue')
@@ -163,7 +158,6 @@ it('filters out non-digit characters except plus sign', async () => {
 
   // Input with non-digit characters - only keep digits
   await input.setValue('abc123-456.789')
-  await input.trigger('input')
 
   // Verify events were emitted
   const emittedEvents = wrapper.emitted()
@@ -187,7 +181,6 @@ it('handles input formatting without losing cursor context', async () => {
 
   // Type a sequence of digits and verify the component formats correctly
   await input.setValue('1')
-  await input.trigger('input')
   const step1 = input.element.value
   expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
     [
@@ -196,20 +189,18 @@ it('handles input formatting without losing cursor context', async () => {
   `)
 
   await input.setValue('12')
-  await input.trigger('input')
   const step2 = input.element.value
   expect(wrapper.emitted('update:modelValue')?.[1]).toMatchInlineSnapshot(`
     [
-      "",
+      "+12",
     ]
   `)
 
   await input.setValue('123')
-  await input.trigger('input')
   const step3 = input.element.value
   expect(wrapper.emitted('update:modelValue')?.[2]).toMatchInlineSnapshot(`
     [
-      "+12",
+      "+123",
     ]
   `)
 

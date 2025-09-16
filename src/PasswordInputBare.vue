@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useTemplateRef, watchEffect } from 'vue'
+import { computed, ref, useTemplateRef } from 'vue'
 import { ClassValue } from './types'
 
 export interface PasswordInputBareProps {
@@ -41,23 +41,27 @@ defineExpose({
   },
 })
 
-const model = defineModel({
-  type: String,
-  default: '',
-})
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+}>()
 
-watchEffect(() => {
-  if (props.value !== undefined) {
-    model.value = props.value
-  }
-})
+const updateValue = (value: string) => {
+  emit('update:modelValue', value)
+}
+
+const handleChange = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  updateValue(input.value)
+}
+
+const effectiveValue = computed(() => props.modelValue ?? props.value ?? '')
 
 const inputType = computed(() => {
   return props.toggleable && isVisible.value ? 'text' : 'password'
 })
 
 const passtroughProps = computed(() => {
-  const { value, toggleable, wrapperClass, ...rest } = props
+  const { value, modelValue, toggleable, wrapperClass, ...rest } = props
   return rest
 })
 </script>
@@ -66,23 +70,25 @@ const passtroughProps = computed(() => {
   <div v-if="toggleable" :class="wrapperClass">
     <input
       ref="input-ref"
-      v-model="model"
+      :value="effectiveValue"
       :type="inputType"
       autocapitalize="none"
       inputmode="text"
       spellcheck="false"
       v-bind="passtroughProps"
+      @change="handleChange"
     />
     <slot name="toggle" :is-visible="isVisible" :toggle="toggleVisibility" />
   </div>
   <input
     v-else
     ref="input-ref"
-    v-model="model"
+    :value="modelValue ?? value ?? ''"
     type="password"
     autocapitalize="none"
     inputmode="text"
     spellcheck="false"
     v-bind="passtroughProps"
+    @change="handleChange"
   />
 </template>

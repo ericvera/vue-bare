@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch } from 'vue'
+import { computed } from 'vue'
 import { ClassValue } from './types'
 
 export interface SwitchBareProps {
@@ -18,27 +18,22 @@ interface Props extends SwitchBareProps {
 
 const props = defineProps<Props>()
 
-const model = defineModel({
-  type: Boolean,
-  default: false,
-})
+const effectiveValue = computed(() => props.modelValue ?? props.value ?? false)
 
-watch(
-  () => props.value,
-  (value) => {
-    model.value = value
-  },
-  {
-    immediate: true,
-  },
-)
+const emit = defineEmits<{
+  'update:modelValue': [value: boolean]
+}>()
+
+const updateValue = (value: boolean) => {
+  emit('update:modelValue', value)
+}
 
 const onClick = () => {
   if (props.disabled) {
     return
   }
 
-  model.value = !model.value
+  updateValue(!effectiveValue.value)
 }
 </script>
 

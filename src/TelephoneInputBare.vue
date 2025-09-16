@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { formatPartialUSPhoneNumber, getPartialE164PhoneNumber } from 'e164num'
-import { computed, useTemplateRef, watchEffect } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 import { ClassValue } from './types'
 
 export interface TelephoneInputBareProps {
@@ -36,10 +36,13 @@ defineExpose({
   },
 })
 
-const model = defineModel({
-  type: String,
-  default: '',
-})
+const emit = defineEmits<{
+  'update:modelValue': [value: string]
+}>()
+
+const updateValue = (value: string) => {
+  emit('update:modelValue', value)
+}
 
 // Create a function that determines the new cursor position based on the
 // previous value and cursor position and the new value
@@ -77,7 +80,7 @@ const handleInput = (event: Event) => {
 
   // Handle empty input case
   if (!value || value.trim() === '') {
-    model.value = ''
+    updateValue('')
     input.value = ''
     return
   }
@@ -93,7 +96,7 @@ const handleInput = (event: Event) => {
 
   const newE164Value = getPartialE164PhoneNumber(finalValue)
 
-  model.value = newE164Value
+  updateValue(newE164Value)
 
   const formattedValue = formatPartialUSPhoneNumber(newE164Value)
 
@@ -114,28 +117,31 @@ const handleInput = (event: Event) => {
   input.setSelectionRange(newCursorPosition, newCursorPosition)
 }
 
-watchEffect(() => {
-  if (props.value !== undefined) {
-    // Handle empty value case
-    if (!props.value || props.value.trim() === '') {
-      model.value = ''
-    } else {
-      model.value = getPartialE164PhoneNumber(props.value)
-    }
-  }
-})
-
 const passtroughProps = computed(() => {
-  const { value, ...rest } = props
+  const { value, modelValue, ...rest } = props
 
   return rest
 })
+
+const effectiveValue = computed(() => {
+  const value = props.modelValue ?? props.value ?? ''
+
+  if (!value || value.trim() === '') {
+    return ''
+  }
+
+  return getPartialE164PhoneNumber(value)
+})
+
+const formattedValue = computed(() =>
+  effectiveValue.value ? formatPartialUSPhoneNumber(effectiveValue.value) : '',
+)
 </script>
 
 <template>
   <input
     ref="input-ref"
-    :value="model ? formatPartialUSPhoneNumber(model) : ''"
+    :value="formattedValue"
     type="tel"
     autocapitalize="none"
     inputmode="tel"
