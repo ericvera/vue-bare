@@ -5,8 +5,14 @@ import TextAreaBare from './TextAreaBare.vue'
 // Mock the window.getComputedStyle
 const mockGetComputedStyle = vi.fn().mockReturnValue({
   getPropertyValue: (prop: string) => {
-    if (prop === 'padding-top') return '5'
-    if (prop === 'padding-bottom') return '5'
+    if (prop === 'padding-top') {
+      return '5'
+    }
+
+    if (prop === 'padding-bottom') {
+      return '5'
+    }
+
     return '0'
   },
 })

@@ -79,7 +79,7 @@ const resize = () => {
       element.value.scrollHeight - totalPadding,
     ) + totalPadding
 
-  element.value.style.height = `${height}px`
+  element.value.style.height = `${height.toString()}px`
 }
 
 const getTotalPadding = (computedStyle: CSSStyleDeclaration) =>

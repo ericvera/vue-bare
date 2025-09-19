@@ -18,7 +18,7 @@ interface Props extends SwitchBareProps {
 
 const props = defineProps<Props>()
 
-const effectiveValue = computed(() => props.modelValue ?? props.value ?? false)
+const effectiveValue = computed(() => props.modelValue || props.value)
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]

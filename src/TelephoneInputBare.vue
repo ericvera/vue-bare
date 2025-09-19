@@ -57,7 +57,7 @@ const getNewCursorPosition = (
     .replace(/[^\d+]/g, '').length
 
   // Find position in new value where we have the same number of digits
-  let newPosition = newValue.length > 0 && newValue[0] === '(' ? 1 : 0
+  let newPosition = newValue.length > 0 && newValue.startsWith('(') ? 1 : 0
   let digitCount = 0
 
   while (newPosition < newValue.length && digitCount < prevDigitsBeforeCursor) {

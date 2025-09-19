@@ -121,3 +121,33 @@ it('allows custom slot content', () => {
   expect(customLabel.exists()).toBe(true)
   expect(customLabel.text()).toBe('Custom Content')
 })
+
+it('prioritizes modelValue over value prop', async () => {
+  const wrapper = createWrapper({
+    modelValue: true,
+    value: false,
+  })
+  const switchDiv = wrapper.find('div')
+
+  // Should use modelValue (true), so clicking should emit false
+  await switchDiv.trigger('click')
+  expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([false])
+})
+
+it('falls back to value when modelValue is undefined', async () => {
+  const wrapper = createWrapper({ value: true })
+  const switchDiv = wrapper.find('div')
+
+  // Should use value (true), so clicking should emit false
+  await switchDiv.trigger('click')
+  expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([false])
+})
+
+it('handles falsy values correctly', async () => {
+  const wrapper = createWrapper({ modelValue: false })
+  const switchDiv = wrapper.find('div')
+
+  // Should use modelValue (false), so clicking should emit true
+  await switchDiv.trigger('click')
+  expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([true])
+})

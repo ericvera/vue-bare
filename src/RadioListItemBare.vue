@@ -31,12 +31,14 @@ const listDisabled = inject<boolean>(RadioListInjectionKeys.Disabled, false)
 const selectedValue = inject<string>(RadioListInjectionKeys.Value, '')
 const onItemClick = inject<(value: string) => void>(
   RadioListInjectionKeys.OnItemClick,
-  () => {},
+  () => {
+    // Default no-op function
+  },
 )
 
 const internalOnItemClick = () => {
   if (!listDisabled && !props.disabled) {
-    onItemClick?.(props.value)
+    onItemClick(props.value)
   }
 }
 </script>
