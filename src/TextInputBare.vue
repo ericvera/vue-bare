@@ -59,6 +59,9 @@ defineExpose({
   blur: () => {
     inputRef.value?.blur()
   },
+  select: () => {
+    inputRef.value?.select()
+  },
 })
 
 const emit = defineEmits<{

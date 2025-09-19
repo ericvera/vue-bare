@@ -50,6 +50,7 @@ Exposed methods:
 
 - `focus()`: Programmatically focus the input element
 - `blur()`: Programmatically blur the input element
+- `select()`: Programmatically select all text in the input element
 
 ```vue
 <TextInputBare

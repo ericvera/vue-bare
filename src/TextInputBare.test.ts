@@ -160,6 +160,36 @@ it('exposes focus method', () => {
   expect(focusSpy).toHaveBeenCalled()
 })
 
+it('exposes blur method', () => {
+  const wrapper = createWrapper()
+  const input = wrapper.find('input')
+
+  // Mock the blur method
+  const blurSpy = vi.spyOn(input.element, 'blur')
+
+  // Blur the input
+  const vm = wrapper.vm as { blur: () => void }
+  vm.blur()
+
+  // Verify blur was called
+  expect(blurSpy).toHaveBeenCalled()
+})
+
+it('exposes select method', () => {
+  const wrapper = createWrapper()
+  const input = wrapper.find('input')
+
+  // Mock the select method
+  const selectSpy = vi.spyOn(input.element, 'select')
+
+  // Select the input text
+  const vm = wrapper.vm as { select: () => void }
+  vm.select()
+
+  // Verify select was called
+  expect(selectSpy).toHaveBeenCalled()
+})
+
 it('trims leading spaces when trimStart is true', async () => {
   const wrapper = createWrapper({ trimStart: true })
   const input = wrapper.find('input')
