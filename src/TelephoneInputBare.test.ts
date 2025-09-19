@@ -235,3 +235,18 @@ it('exposes focus method', () => {
   // Verify focus was called
   expect(focusSpy).toHaveBeenCalled()
 })
+
+it('exposes select method', () => {
+  const wrapper = createWrapper()
+  const input = wrapper.find('input')
+
+  // Mock the select method
+  const selectSpy = vi.spyOn(input.element, 'select')
+
+  // Select the input text
+  const vm = wrapper.vm as { select: () => void }
+  vm.select()
+
+  // Verify select was called
+  expect(selectSpy).toHaveBeenCalled()
+})
