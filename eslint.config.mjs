@@ -94,6 +94,8 @@ export default defineConfig(
             'Use flat test structure with it() methods only. Do not use describe wrappers.',
         },
       ],
+      // Allow multiple components in test files
+      'vue/one-component-per-file': 'off',
     },
   },
 )
