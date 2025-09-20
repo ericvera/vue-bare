@@ -61,9 +61,12 @@ const handleInput = (event: Event) => {
   // Filter out non-digit characters
   let filteredValue = value.replace(/[^\d]/g, '')
 
-  // Apply maxDigits constraint
-  if (props.maxDigits !== undefined && filteredValue.length > props.maxDigits) {
-    filteredValue = filteredValue.slice(0, props.maxDigits)
+  // Apply maxDigits constraint (default to 15 to stay within safe integer
+  // range)
+  const effectiveMaxDigits = Math.min(props.maxDigits ?? 15, 15)
+
+  if (filteredValue.length > effectiveMaxDigits) {
+    filteredValue = filteredValue.slice(0, effectiveMaxDigits)
   }
 
   // Update input value to filtered value

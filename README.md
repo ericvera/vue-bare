@@ -218,7 +218,7 @@ When `toggleable` is enabled:
 
 ### NumberInputBare
 
-A specialized input component for numeric input that only allows digits. Automatically filters out non-numeric characters and supports limiting the maximum number of digits.
+A specialized input component for numeric input that only allows digits. Automatically filters out non-numeric characters and supports limiting the maximum number of digits. Defaults to a maximum of 15 digits to stay within JavaScript's safe integer range.
 
 Required props:
 
@@ -232,7 +232,7 @@ Optional props:
 
 - `autofocus`: boolean
 - `disabled`: boolean
-- `maxDigits`: number - Maximum number of digits allowed
+- `maxDigits`: number - Maximum number of digits allowed (capped at 15 for safety)
 - `value`: number
 
 Exposed methods:

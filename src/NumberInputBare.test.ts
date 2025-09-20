@@ -156,7 +156,24 @@ it('allows input up to maxDigits length', async () => {
   `)
 })
 
-it('works without maxDigits constraint', async () => {
+it('defaults to 15 digit limit when no maxDigits is provided', async () => {
+  const wrapper = createWrapper()
+  const input = wrapper.find('input')
+  const inputElement = input.element
+
+  // 16 digits - should be truncated to 15
+  inputElement.value = '1234567890123456'
+  await input.trigger('input')
+
+  expect(inputElement.value).toBe('123456789012345')
+  expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
+    [
+      123456789012345,
+    ]
+  `)
+})
+
+it('works with values under default 15 digit limit', async () => {
   const wrapper = createWrapper()
   const input = wrapper.find('input')
   const inputElement = input.element
@@ -240,6 +257,23 @@ it('handles zero correctly', async () => {
     ]
   `)
   expect(input.element.value).toBe('0')
+})
+
+it('caps maxDigits at 15 even if higher value is provided', async () => {
+  const wrapper = createWrapper({ maxDigits: 20 })
+  const input = wrapper.find('input')
+  const inputElement = input.element
+
+  // 16 digits - should still be truncated to 15 despite maxDigits being 20
+  inputElement.value = '1234567890123456'
+  await input.trigger('input')
+
+  expect(inputElement.value).toBe('123456789012345')
+  expect(wrapper.emitted('update:modelValue')?.[0]).toMatchInlineSnapshot(`
+    [
+      123456789012345,
+    ]
+  `)
 })
 
 it('does not pass maxDigits prop as HTML attribute', () => {
