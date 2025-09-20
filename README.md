@@ -216,6 +216,45 @@ When `toggleable` is enabled:
 - The input type switches between "password" and "text" based on visibility
 - The `autocomplete` attribute is maintained regardless of visibility state for security
 
+### NumberInputBare
+
+A specialized input component for numeric input that only allows digits. Automatically filters out non-numeric characters and supports limiting the maximum number of digits.
+
+Required props:
+
+- `autocomplete`: 'off'
+- `class`: ClassValue
+- `id`: string
+- `name`: string
+- `placeholder`: string
+
+Optional props:
+
+- `autofocus`: boolean
+- `disabled`: boolean
+- `maxDigits`: number - Maximum number of digits allowed
+- `value`: number
+
+Exposed methods:
+
+- `focus()`: Programmatically focus the input element
+- `blur()`: Programmatically blur the input element
+- `select()`: Programmatically select all text in the input element
+
+```vue
+<NumberInputBare
+  ref="numberInput"
+  v-model="quantity"
+  id="quantity"
+  name="quantity"
+  autocomplete="off"
+  placeholder="Enter quantity"
+  :maxDigits="3"
+  class="number-input-class"
+/>
+<button @click="numberInput.focus()">Focus Input</button>
+```
+
 ### TelephoneInputBare
 
 A specialized input component for phone numbers that handles formatting and E.164 standardization. The component automatically formats US phone numbers for display while maintaining E.164 format for the actual value.

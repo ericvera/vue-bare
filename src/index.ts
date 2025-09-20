@@ -1,4 +1,5 @@
 import EmailInputBare from './EmailInputBare.vue'
+import NumberInputBare from './NumberInputBare.vue'
 import PasswordInputBare from './PasswordInputBare.vue'
 import RadioListBare from './RadioListBare.vue'
 import RadioListItemBare from './RadioListItemBare.vue'
@@ -9,6 +10,7 @@ import TextAreaBare from './TextAreaBare.vue'
 import TextInputBare from './TextInputBare.vue'
 
 export * from './EmailInputBare.vue'
+export * from './NumberInputBare.vue'
 export * from './PasswordInputBare.vue'
 export * from './RadioListBare.vue'
 export * from './RadioListItemBare.vue'
@@ -21,6 +23,7 @@ export * from './types.js'
 
 export {
   EmailInputBare,
+  NumberInputBare,
   PasswordInputBare,
   RadioListBare,
   RadioListItemBare,
