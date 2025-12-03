@@ -91,8 +91,12 @@ const getLineHeight = () => {
     return 0
   }
 
-  // Store original value set to empty to force single line height calculation
+  // Store original values
   const originalValue = element.value.value
+  const originalPlaceholder = element.value.placeholder
+
+  // Temporarily remove placeholder to avoid it affecting height calculation
+  element.value.placeholder = ''
   element.value.value = ''
   element.value.rows = 1
 
@@ -109,6 +113,7 @@ const getLineHeight = () => {
   // Restore original state
   element.value.rows = 1
   element.value.value = originalValue
+  element.value.placeholder = originalPlaceholder
 
   return twoLineHeight - oneLineHeight
 }
